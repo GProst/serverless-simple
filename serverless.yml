@@ -31,19 +31,6 @@ provider:
         - dynamodb:*
       Resource: "arn:aws:dynamodb:*:*:*"
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
-
 functions:
   hello:
     handler: handler.hello
@@ -77,10 +64,6 @@ functions:
 #          pool: MyUserPool
 #          trigger: PreSignUp
 
-#    Define function environment variables here
-#    environment:
-#      variable2: value2
-
 # you can add CloudFormation resource templates here
 resources:
   Resources:
@@ -97,14 +80,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
