@@ -13,8 +13,7 @@ module.exports.hello = (event, context, callback) => {
           callback(null, {
             statusCode: 200,
             body: JSON.stringify({
-              result,
-              input: event
+              result
             })
           })
         })
@@ -22,7 +21,31 @@ module.exports.hello = (event, context, callback) => {
       break
     }
     case 'POST': {
-
+      if (event.body && event.body.name) {
+        dynamodb.putItem({
+          Item: {
+            'name': {
+              S: event.body.name
+            }
+          },
+          ReturnConsumedCapacity: 'TOTAL',
+          TableName
+        })
+          .then(result => {
+            callback(null, {
+              statusCode: 200,
+              body: JSON.stringify({
+                result
+              })
+            })
+          })
+          .catch(callback)
+      } else {
+        callback(null, {
+          statusCode: 400,
+          body: JSON.stringify({message: `Parameter 'name' is required!`})
+        })
+      }
       break
     }
     default: {
