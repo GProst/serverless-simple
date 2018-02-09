@@ -22,25 +22,14 @@ provider:
   runtime: nodejs6.10
   stage: test
   profile: test
-
-# you can overwrite defaults here
-#  region: us-east-1
-
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  region: us-east-1
+  stackTags: # Optional CF stack tags
+     Stack: test-serverless
+  iamRoleStatements: # permissions for all of your functions can be set here
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "arn:aws:dynamodb:*:*:*"
 
 # you can define service wide environment variables here
 #  environment:
@@ -93,6 +82,22 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
+resources:
+  Resources:
+    booksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: booksTable
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: S
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
 #resources:
 #  Resources:
 #    NewResource:
