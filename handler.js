@@ -31,6 +31,7 @@ module.exports.hello = (event, context, callback) => {
           ReturnConsumedCapacity: 'TOTAL',
           TableName
         })
+          .promise()
           .then(result => {
             callback(null, {
               statusCode: 200,
