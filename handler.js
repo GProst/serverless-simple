@@ -21,11 +21,28 @@ module.exports.hello = (event, context, callback) => {
       break
     }
     case 'POST': {
-      if (event.body && event.body.name) {
+      if (event.body) {
+        let name
+        try {
+          name = JSON.parse(event.body).name
+          if (!name) {
+            callback(null, {
+              statusCode: 400,
+              body: JSON.stringify({message: `Parameter 'name' is required!`})
+            })
+            break
+          }
+        } catch (err) {
+          callback(null, {
+            statusCode: 400,
+            body: JSON.stringify({message: `Expected to receive JSON string as a request body.`})
+          })
+          break
+        }
         dynamodb.putItem({
           Item: {
             'name': {
-              S: event.body.name
+              S: name
             }
           },
           ReturnConsumedCapacity: 'TOTAL',
